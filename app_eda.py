@@ -223,7 +223,7 @@ class EDA:
             
             st.title("📊 인구 통계 데이터 전처리 및 분석")
 
-            uploaded_file = st.file_uploader("CSV 파일을 업로드하세요", type=["csv"])
+            
 
             if uploaded_file is not None:
                 # 파일 읽기
@@ -263,7 +263,7 @@ class EDA:
             
             st.title("📈 National Population Trend and 2035 Projection")
 
-            uploaded_file = st.file_uploader("Upload population_trends.csv", type=["csv"])
+            
 
             if uploaded_file is not None:
                 df = pd.read_csv(uploaded_file)
@@ -313,7 +313,7 @@ class EDA:
             
             st.title("📈 Regional Population Trends (Last 5 Years)")
 
-            uploaded_file = st.file_uploader("Upload your population_trends.csv file", type=["csv"])
+            
 
             # 지역명 매핑
             region_map = {
@@ -383,7 +383,7 @@ class EDA:
             
             st.title("📊 Top 100 Population Changes by Year and Region")
 
-            uploaded_file = st.file_uploader("Upload population_trends.csv", type=["csv"])
+            
 
             if uploaded_file is not None:
                 df = pd.read_csv(uploaded_file)
