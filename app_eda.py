@@ -225,9 +225,9 @@ class EDA:
 
             
 
-            if uploaded_file is not None:
+            if uploaded is not None:
                 # 파일 읽기
-                df = pd.read_csv(uploaded_file)
+                df = pd.read_csv(uploaded)
 
                 st.subheader("✅ 원본 데이터 미리보기")
                 st.dataframe(df.head())
@@ -265,8 +265,8 @@ class EDA:
 
             
 
-            if uploaded_file is not None:
-                df = pd.read_csv(uploaded_file)
+            if uploaded is not None:
+                df = pd.read_csv(uploaded)
 
                 # '-' 처리 및 숫자 변환
                 df.replace('-', 0, inplace=True)
@@ -324,8 +324,8 @@ class EDA:
                 '제주': 'Jeju'
             }
 
-            if uploaded_file is not None:
-                df = pd.read_csv(uploaded_file)
+            if uploaded is not None:
+                df = pd.read_csv(uploaded)
     
                 # 전처리
                 df.replace('-', 0, inplace=True)
@@ -385,8 +385,8 @@ class EDA:
 
             
 
-            if uploaded_file is not None:
-                df = pd.read_csv(uploaded_file)
+            if uploaded is not None:
+                df = pd.read_csv(uploaded)
     
                 # 전처리
                 df.replace('-', 0, inplace=True)
@@ -425,8 +425,7 @@ class EDA:
             st.title("Population Trends by Region (Stacked Area Chart)")
 
             # CSV 파일 로드
-            csv_file = "population_trends.csv"  # 파일 경로를 여기에 맞게 설정
-            df = pd.read_csv(csv_file)
+            df = pd.read_csv(uploaded)
 
             # 한글 컬럼명 → 영문 컬럼명 변경
             df.rename(columns={
