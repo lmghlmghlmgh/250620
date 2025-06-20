@@ -501,55 +501,112 @@ class EDA:
 
         # 5. 시각화
         with tabs[4]:
-            st.header("📈 시각화")
-            # by 근무일 여부
-            st.subheader("근무일 여부별 시간대별 평균 대여량")
-            fig1, ax1 = plt.subplots()
-            sns.pointplot(x='hour', y='count', hue='workingday', data=df,
-                          ax=ax1)
-            ax1.set_xlabel("Hour");
-            ax1.set_ylabel("Average Count")
-            st.pyplot(fig1)
-            st.markdown(
-                "> **해석:** 근무일(1)은 출퇴근 시간(7 ~ 9시, 17 ~ 19시)에 대여량이 급증하는 반면,\n"
-                "비근무일(0)은 오후(11 ~ 15시) 시간대에 대여량이 상대적으로 높게 나타납니다."
-            )
+            # st.header("📈 시각화")
+            # # by 근무일 여부
+            # st.subheader("근무일 여부별 시간대별 평균 대여량")
+            # fig1, ax1 = plt.subplots()
+            # sns.pointplot(x='hour', y='count', hue='workingday', data=df,
+            #               ax=ax1)
+            # ax1.set_xlabel("Hour");
+            # ax1.set_ylabel("Average Count")
+            # st.pyplot(fig1)
+            # st.markdown(
+            #     "> **해석:** 근무일(1)은 출퇴근 시간(7 ~ 9시, 17 ~ 19시)에 대여량이 급증하는 반면,\n"
+            #     "비근무일(0)은 오후(11 ~ 15시) 시간대에 대여량이 상대적으로 높게 나타납니다."
+            # )
 
-            # by 요일
-            st.subheader("요일별 시간대별 평균 대여량")
-            fig2, ax2 = plt.subplots()
-            sns.pointplot(x='hour', y='count', hue='dayofweek', data=df, ax=ax2)
-            ax2.set_xlabel("Hour");
-            ax2.set_ylabel("Average Count")
-            st.pyplot(fig2)
-            st.markdown(
-                "> **해석:** 평일(월 ~ 금)은 출퇴근 피크가 두드러지고,\n"
-                "주말(토~일)은 오전 중반(10 ~ 14시)에 대여량이 더 고르게 분포하는 경향이 있습니다."
-            )
+            # # by 요일
+            # st.subheader("요일별 시간대별 평균 대여량")
+            # fig2, ax2 = plt.subplots()
+            # sns.pointplot(x='hour', y='count', hue='dayofweek', data=df, ax=ax2)
+            # ax2.set_xlabel("Hour");
+            # ax2.set_ylabel("Average Count")
+            # st.pyplot(fig2)
+            # st.markdown(
+            #     "> **해석:** 평일(월 ~ 금)은 출퇴근 피크가 두드러지고,\n"
+            #     "주말(토~일)은 오전 중반(10 ~ 14시)에 대여량이 더 고르게 분포하는 경향이 있습니다."
+            # )
 
-            # by 시즌
-            st.subheader("시즌별 시간대별 평균 대여량")
-            fig3, ax3 = plt.subplots()
-            sns.pointplot(x='hour', y='count', hue='season', data=df, ax=ax3)
-            ax3.set_xlabel("Hour");
-            ax3.set_ylabel("Average Count")
-            st.pyplot(fig3)
-            st.markdown(
-                "> **해석:** 여름(2)과 가을(3)에 전반적으로 대여량이 높고,\n"
-                "겨울(4)은 전 시간대에 걸쳐 대여량이 낮게 나타납니다."
-            )
+            # # by 시즌
+            # st.subheader("시즌별 시간대별 평균 대여량")
+            # fig3, ax3 = plt.subplots()
+            # sns.pointplot(x='hour', y='count', hue='season', data=df, ax=ax3)
+            # ax3.set_xlabel("Hour");
+            # ax3.set_ylabel("Average Count")
+            # st.pyplot(fig3)
+            # st.markdown(
+            #     "> **해석:** 여름(2)과 가을(3)에 전반적으로 대여량이 높고,\n"
+            #     "겨울(4)은 전 시간대에 걸쳐 대여량이 낮게 나타납니다."
+            # )
 
-            # by 날씨
-            st.subheader("날씨 상태별 시간대별 평균 대여량")
-            fig4, ax4 = plt.subplots()
-            sns.pointplot(x='hour', y='count', hue='weather', data=df, ax=ax4)
-            ax4.set_xlabel("Hour");
-            ax4.set_ylabel("Average Count")
-            st.pyplot(fig4)
-            st.markdown(
-                "> **해석:** 맑음(1)은 전 시간대에서 대여량이 가장 높으며,\n"
-                "안개·흐림(2), 가벼운 비/눈(3)에선 다소 감소하고, 심한 기상(4)에서는 크게 떨어집니다."
-            )
+            # # by 날씨
+            # st.subheader("날씨 상태별 시간대별 평균 대여량")
+            # fig4, ax4 = plt.subplots()
+            # sns.pointplot(x='hour', y='count', hue='weather', data=df, ax=ax4)
+            # ax4.set_xlabel("Hour");
+            # ax4.set_ylabel("Average Count")
+            # st.pyplot(fig4)
+            # st.markdown(
+            #     "> **해석:** 맑음(1)은 전 시간대에서 대여량이 가장 높으며,\n"
+            #     "안개·흐림(2), 가벼운 비/눈(3)에선 다소 감소하고, 심한 기상(4)에서는 크게 떨어집니다."
+            # )
+            # 앱 제목
+            st.title("Population Trends by Region (Stacked Area Chart)")
+
+            # CSV 파일 로드
+            csv_file = "population_trends.csv"  # 파일 경로를 여기에 맞게 설정
+            df = pd.read_csv(csv_file)
+
+            # 한글 컬럼명 → 영문 컬럼명 변경
+            df.rename(columns={
+                "연도": "Year",
+                "지역": "Region",
+                "인구": "Population",
+                "출생아수(명)": "Births",
+                "사망자수(명)": "Deaths"
+            }, inplace=True)
+
+            # 지역명 한글 → 영문 매핑
+            region_map = {
+                "전국": "Total",
+                "서울": "Seoul",
+                "부산": "Busan",
+                "대구": "Daegu",
+                "인천": "Incheon",
+                "광주": "Gwangju",
+                "대전": "Daejeon",
+                "울산": "Ulsan",
+                "세종": "Sejong",
+                "경기": "Gyeonggi",
+                "강원": "Gangwon",
+                "충북": "Chungbuk",
+                "충남": "Chungnam",
+                "전북": "Jeonbuk",
+                "전남": "Jeonnam",
+                "경북": "Gyeongbuk",
+                "경남": "Gyeongnam",
+                "제주": "Jeju"
+            }
+            df["Region"] = df["Region"].map(region_map)
+
+            # 피벗 테이블 생성 (행: 연도, 열: 지역)
+            pivot_df = df.pivot(index="Year", columns="Region", values="Population")
+
+            # NaN 값 제거
+            pivot_df.dropna(axis=1, inplace=True)
+
+            # 누적 영역 그래프 그리기
+            fig, ax = plt.subplots(figsize=(12, 6))
+            pivot_df.plot.area(ax=ax, cmap="tab20", alpha=0.85)
+
+            ax.set_title("Population Trends by Region", fontsize=16)
+            ax.set_xlabel("Year")
+            ax.set_ylabel("Population")
+            ax.legend(title="Region", bbox_to_anchor=(1.05, 1), loc='upper left')
+            plt.tight_layout()
+
+            # 그래프 출력
+            st.pyplot(fig)
 
         # 6. 상관관계 분석
         with tabs[5]:
