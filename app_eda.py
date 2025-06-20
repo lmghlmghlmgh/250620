@@ -310,7 +310,7 @@ class EDA:
         # 3. 데이터 로드 & 품질 체크
         with tabs[2]:
             
-            st.set_option('deprecation.showPyplotGlobalUse', False)
+            
             st.title("📈 Regional Population Trends (Last 5 Years)")
 
             uploaded_file = st.file_uploader("Upload your population_trends.csv file", type=["csv"])
