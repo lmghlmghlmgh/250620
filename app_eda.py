@@ -363,102 +363,141 @@ class EDA:
             # duplicates = df.duplicated().sum()
             # st.write(f"- 중복 행 개수: {duplicates}개")
             st.set_option('deprecation.showPyplotGlobalUse', False)
-st.title("📈 Regional Population Trends (Last 5 Years)")
+            st.title("📈 Regional Population Trends (Last 5 Years)")
 
-uploaded_file = st.file_uploader("Upload your population_trends.csv file", type=["csv"])
+            uploaded_file = st.file_uploader("Upload your population_trends.csv file", type=["csv"])
 
-# 지역명 매핑
-region_map = {
-    '서울': 'Seoul', '부산': 'Busan', '대구': 'Daegu', '인천': 'Incheon',
-    '광주': 'Gwangju', '대전': 'Daejeon', '울산': 'Ulsan', '세종': 'Sejong',
-    '경기': 'Gyeonggi', '강원': 'Gangwon', '충북': 'Chungbuk', '충남': 'Chungnam',
-    '전북': 'Jeonbuk', '전남': 'Jeonnam', '경북': 'Gyeongbuk', '경남': 'Gyeongnam',
-    '제주': 'Jeju'
-}
+            # 지역명 매핑
+            region_map = {
+                '서울': 'Seoul', '부산': 'Busan', '대구': 'Daegu', '인천': 'Incheon',
+                '광주': 'Gwangju', '대전': 'Daejeon', '울산': 'Ulsan', '세종': 'Sejong',
+                '경기': 'Gyeonggi', '강원': 'Gangwon', '충북': 'Chungbuk', '충남': 'Chungnam',
+                '전북': 'Jeonbuk', '전남': 'Jeonnam', '경북': 'Gyeongbuk', '경남': 'Gyeongnam',
+                '제주': 'Jeju'
+            }
 
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
+            if uploaded_file is not None:
+                df = pd.read_csv(uploaded_file)
     
-    # 전처리
-    df.replace('-', 0, inplace=True)
-    df['인구'] = pd.to_numeric(df['인구'], errors='coerce').fillna(0)
-    df = df[df['지역'] != '전국']
+                # 전처리
+                df.replace('-', 0, inplace=True)
+                df['인구'] = pd.to_numeric(df['인구'], errors='coerce').fillna(0)
+                df = df[df['지역'] != '전국']
 
-    latest_year = df['연도'].max()
-    five_years_ago = latest_year - 5
-    df_recent = df[df['연도'].between(five_years_ago, latest_year)]
+                latest_year = df['연도'].max()
+                five_years_ago = latest_year - 5
+                df_recent = df[df['연도'].between(five_years_ago, latest_year)]
 
-    pivot = df_recent.pivot(index='지역', columns='연도', values='인구')
-    pivot = pivot.dropna()
+                pivot = df_recent.pivot(index='지역', columns='연도', values='인구')
+                pivot = pivot.dropna()
 
-    pivot['Change'] = (pivot[latest_year] - pivot[five_years_ago]) / 1000  # 천명 단위
-    pivot['Rate (%)'] = ((pivot[latest_year] - pivot[five_years_ago]) / pivot[five_years_ago]) * 100
-    pivot['Region'] = pivot.index.map(region_map)
+                pivot['Change'] = (pivot[latest_year] - pivot[five_years_ago]) / 1000  # 천명 단위
+                pivot['Rate (%)'] = ((pivot[latest_year] - pivot[five_years_ago]) / pivot[five_years_ago]) * 100
+                pivot['Region'] = pivot.index.map(region_map)
     
-    # ===== 📊 인구 변화량 그래프 =====
-    sorted_by_change = pivot.sort_values('Change', ascending=False)
+                # ===== 📊 인구 변화량 그래프 =====
+                sorted_by_change = pivot.sort_values('Change', ascending=False)
 
-    st.subheader("Population Change by Region (in thousands)")
-    fig1, ax1 = plt.subplots(figsize=(10, 8))
-    sns.barplot(data=sorted_by_change, y='Region', x='Change', palette='Blues_r', ax=ax1)
-    for i, val in enumerate(sorted_by_change['Change']):
-        ax1.text(val + 1, i, f"{val:.1f}", va='center')
-    ax1.set_title("Population Change (Last 5 Years)", fontsize=14)
-    ax1.set_xlabel("Change (in thousands)")
-    ax1.set_ylabel("Region")
-    st.pyplot(fig1)
+                st.subheader("Population Change by Region (in thousands)")
+                fig1, ax1 = plt.subplots(figsize=(10, 8))
+                sns.barplot(data=sorted_by_change, y='Region', x='Change', palette='Blues_r', ax=ax1)
+                for i, val in enumerate(sorted_by_change['Change']):
+                    ax1.text(val + 1, i, f"{val:.1f}", va='center')
+                ax1.set_title("Population Change (Last 5 Years)", fontsize=14)
+                ax1.set_xlabel("Change (in thousands)")
+                ax1.set_ylabel("Region")
+                st.pyplot(fig1)
 
-    # ===== 📊 인구 변화율 그래프 =====
-    sorted_by_rate = pivot.sort_values('Rate (%)', ascending=False)
+                # ===== 📊 인구 변화율 그래프 =====
+                sorted_by_rate = pivot.sort_values('Rate (%)', ascending=False)
 
-    st.subheader("Population Change Rate by Region (%)")
-    fig2, ax2 = plt.subplots(figsize=(10, 8))
-    sns.barplot(data=sorted_by_rate, y='Region', x='Rate (%)', palette='coolwarm', ax=ax2)
-    for i, val in enumerate(sorted_by_rate['Rate (%)']):
-        ax2.text(val + 0.5, i, f"{val:.1f}%", va='center')
-    ax2.set_title("Population Growth Rate (%)", fontsize=14)
-    ax2.set_xlabel("Growth Rate (%)")
-    ax2.set_ylabel("Region")
-    st.pyplot(fig2)
+                st.subheader("Population Change Rate by Region (%)")
+                fig2, ax2 = plt.subplots(figsize=(10, 8))
+                sns.barplot(data=sorted_by_rate, y='Region', x='Rate (%)', palette='coolwarm', ax=ax2)
+                for i, val in enumerate(sorted_by_rate['Rate (%)']):
+                    ax2.text(val + 0.5, i, f"{val:.1f}%", va='center')
+                ax2.set_title("Population Growth Rate (%)", fontsize=14)
+                ax2.set_xlabel("Growth Rate (%)")
+                ax2.set_ylabel("Region")
+                st.pyplot(fig2)
 
-    # ===== 📘 해설 =====
-    st.markdown("### 📘 Interpretation")
-    st.write(f"- Region **{sorted_by_rate.iloc[0]['Region']}** showed the highest population growth rate in the past 5 years.")
-    st.write(f"- Region **{sorted_by_rate.iloc[-1]['Region']}** experienced the largest decline in population rate.")
-    st.write("- This analysis reflects regional demographic trends and may relate to factors such as migration, birth rates, and local policies.")
+                # ===== 📘 해설 =====
+                st.markdown("### 📘 Interpretation")
+                st.write(f"- Region **{sorted_by_rate.iloc[0]['Region']}** showed the highest population growth rate in the past 5 years.")
+                st.write(f"- Region **{sorted_by_rate.iloc[-1]['Region']}** experienced the largest decline in population rate.")
+                st.write("- This analysis reflects regional demographic trends and may relate to factors such as migration, birth rates, and local policies.")
+
+
+            
 
         # 4. Datetime 특성 추출
         with tabs[3]:
-            st.header("🕒 Datetime 특성 추출")
-            st.markdown("`datetime` 컬럼에서 연, 월, 일, 시, 요일 등을 추출합니다.")
+            # st.header("🕒 Datetime 특성 추출")
+            # st.markdown("`datetime` 컬럼에서 연, 월, 일, 시, 요일 등을 추출합니다.")
 
-            df['year'] = df['datetime'].dt.year
-            df['month'] = df['datetime'].dt.month
-            df['day'] = df['datetime'].dt.day
-            df['hour'] = df['datetime'].dt.hour
-            df['dayofweek'] = df['datetime'].dt.dayofweek
+            # df['year'] = df['datetime'].dt.year
+            # df['month'] = df['datetime'].dt.month
+            # df['day'] = df['datetime'].dt.day
+            # df['hour'] = df['datetime'].dt.hour
+            # df['dayofweek'] = df['datetime'].dt.dayofweek
 
-            st.subheader("추출된 특성 예시")
-            st.dataframe(df[['datetime', 'year', 'month', 'day', 'hour',
-                             'dayofweek']].head())
+            # st.subheader("추출된 특성 예시")
+            # st.dataframe(df[['datetime', 'year', 'month', 'day', 'hour',
+            #                  'dayofweek']].head())
 
-            # --- 요일 숫자 → 요일명 매핑 (참고용) ---
-            day_map = {
-                0: '월요일',
-                1: '화요일',
-                2: '수요일',
-                3: '목요일',
-                4: '금요일',
-                5: '토요일',
-                6: '일요일'
-            }
-            st.markdown("**(참고) dayofweek 숫자 → 요일**")
-            # 중복 제거 후 정렬하여 표시
-            mapping_df = pd.DataFrame({
-                'dayofweek': list(day_map.keys()),
-                'weekday': list(day_map.values())
-            })
-            st.dataframe(mapping_df, hide_index=True)
+            # # --- 요일 숫자 → 요일명 매핑 (참고용) ---
+            # day_map = {
+            #     0: '월요일',
+            #     1: '화요일',
+            #     2: '수요일',
+            #     3: '목요일',
+            #     4: '금요일',
+            #     5: '토요일',
+            #     6: '일요일'
+            # }
+            # st.markdown("**(참고) dayofweek 숫자 → 요일**")
+            # # 중복 제거 후 정렬하여 표시
+            # mapping_df = pd.DataFrame({
+            #     'dayofweek': list(day_map.keys()),
+            #     'weekday': list(day_map.values())
+            # })
+            # st.dataframe(mapping_df, hide_index=True)
+            st.title("📊 Top 100 Population Changes by Year and Region")
+
+            uploaded_file = st.file_uploader("Upload population_trends.csv", type=["csv"])
+
+            if uploaded_file is not None:
+                df = pd.read_csv(uploaded_file)
+    
+                # 전처리
+                df.replace('-', 0, inplace=True)
+                df['인구'] = pd.to_numeric(df['인구'], errors='coerce').fillna(0)
+                df = df[df['지역'] != '전국']  # 전국 제외
+    
+                # 연도순 정렬 후 diff 계산
+                df_sorted = df.sort_values(['지역', '연도'])
+                df_sorted['증감'] = df_sorted.groupby('지역')['인구'].diff()
+
+                # 상위 100개 추출 (증가/감소 포함)
+                top_diff = df_sorted.dropna().sort_values('증감', key=lambda x: abs(x), ascending=False).head(100).copy()
+
+                # 천 단위 콤마 추가
+                top_diff['인구'] = top_diff['인구'].apply(lambda x: f"{int(x):,}")
+                top_diff['증감'] = top_diff['증감'].apply(lambda x: f"{int(x):,}")
+
+                # 컬러바 스타일 함수 정의
+                def color_diff(val):
+                    try:
+                        val_num = int(val.replace(",", ""))
+                        color = f'background-color: rgb({255 if val_num < 0 else 0}, {0 if val_num < 0 else 128}, {0 if val_num < 0 else 255}, 0.3)'
+                        return color
+                    except:
+                        return ''
+    
+                st.subheader("📌 Top 100 Yearly Population Changes (excluding national data)")
+
+                styled_df = top_diff[['연도', '지역', '인구', '증감']].style.applymap(color_diff, subset=['증감'])
+                st.dataframe(styled_df, use_container_width=True)
 
         # 5. 시각화
         with tabs[4]:
